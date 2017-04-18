@@ -434,5 +434,16 @@ void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
 }
 
 void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
+	
+	Quaternion q2, q3;
 
+	float theta_ = acos(q0.dot(q1));
+	float theta = theta_ * t;
+
+	q2 = q1 - q0 * (q0.dot(q1));
+	q2.normalize();
+	q3 = q0 * cos(theta) + q2 * sin(theta);
+
+	q3.normalize();
+	ViewUp = q3.toCVector();
 }

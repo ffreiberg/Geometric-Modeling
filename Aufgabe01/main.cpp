@@ -96,7 +96,7 @@ void display (void) {
 	z2 = view.Project(M * z2);
 
 	bhamLineH(x1, x2, Color(.0, .0, 1.));
-	bhamLineH(y1, y2, Color(.0, 1., 1.));
+	bhamLineH(y1, y2, Color(.0, 1., 0.));
 	bhamLineH(z1, z2, Color(1., .0, .0));
 
 	glFlush ();
