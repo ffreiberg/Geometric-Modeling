@@ -20,10 +20,16 @@ public:
 	~Quaternion();
 
 	void rotate(Quaternion);
+	void normalize();
+	float dot(Quaternion);
+	float norm();
 	CVec4f toCVector();
 
 	Quaternion operator+(const Quaternion&);
+	Quaternion operator-(const Quaternion&);
 	Quaternion operator*(const Quaternion&);
+	Quaternion operator*(const int&);
+	Quaternion operator*(const float&);
 	float& operator[](int);
 	float operator[](int) const;
 };

@@ -32,6 +32,8 @@ const int g_iHeight = 500; // window height (choose an appropriate size)
 // private, global variables ... replace by your own ones
 viewSystem view;
 Quader Q1,Q2,Q3;
+Quaternion b(1., 1., 0., 0.), e(0., -1., 0., 0.);
+float t;
 //
 /////////////////////////////////////////////////////////////
 
@@ -46,6 +48,7 @@ void init ()
 	Q1.setData(CVec4f( -25, -25, -25, 1),CVec4f(  25,  25,  25, 1));
 	Q2.setData(CVec4f(   0,   0,   0, 1),CVec4f( 100, 100, 100, 1));
 	Q3.setData(CVec4f(-155, -55, -75, 1),CVec4f( -90,  50,  50, 1));
+	t = .0;
 }
 
 void initGL () 
@@ -177,6 +180,29 @@ void keyboard (unsigned char key, int x, int y)
 		case 'w':
 			Translation(2) = -3;
 			view.Translate(Translation);
+			break;
+
+		// interpolation
+		case 'l':
+		case 'L':
+			if (t <= 1.) {
+				view.lerp(b, e, t);
+				t += .01;
+			}
+			break;
+		case 'n':
+		case 'N':
+			if (t <= 1.) {
+				view.nlerp(b, e, t);
+				t += .01;
+			}
+			break;
+		case 's':
+		case 'S':
+			if (t <= 1.) {
+				view.slerp(b, e, t);
+				t += .01;
+			}
 			break;
 
 		// Reset

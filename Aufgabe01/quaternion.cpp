@@ -49,10 +49,46 @@ void Quaternion::rotate(Quaternion q)
 	// q * p * q'
 	qRot = q * (*this) * q_;
 
-	this->x[0] = 0;
-	this->x[1] = qRot.x[1];
-	this->x[2] = qRot.x[2];
-	this->x[3] = qRot.x[3];
+	x[0] = 0;
+	x[1] = qRot.x[1];
+	x[2] = qRot.x[2];
+	x[3] = qRot.x[3];
+}
+
+void Quaternion::normalize() {
+
+	float d = sqrt(
+		x[0] * x[0] + 
+		x[1] * x[1] + 
+		x[2] * x[2] + 
+		x[3] * x[3]
+	);
+
+	x[0] /= d;
+	x[1] /= d;
+	x[2] /= d;
+	x[3] /= d;
+}
+
+float Quaternion::dot(Quaternion q) {
+
+	float s = .0;
+
+	s += x[0] * q[0];
+	s += x[1] * q[1];
+	s += x[2] * q[2];
+	s += x[3] * q[3];
+
+	return s;
+}
+
+float Quaternion::norm() {
+	return sqrt(
+		x[0] * x[0] +
+		x[1] * x[1] +
+		x[2] * x[2] +
+		x[3] * x[3]
+	);
 }
 
 
@@ -68,6 +104,18 @@ Quaternion Quaternion::operator+(const Quaternion& rhs)
 	return q;
 }
 
+Quaternion Quaternion::operator-(const Quaternion& rhs)
+{
+	Quaternion q;
+
+	q.x[0] = x[0] - rhs.x[0];
+	q.x[1] = x[1] - rhs.x[1];
+	q.x[2] = x[2] - rhs.x[2];
+	q.x[3] = x[3] - rhs.x[3];
+
+	return q;
+}
+
 Quaternion Quaternion::operator*(const Quaternion& rhs)
 {
 	Quaternion q;
@@ -76,6 +124,30 @@ Quaternion Quaternion::operator*(const Quaternion& rhs)
 	q.x[1] = x[0] * rhs.x[1] + rhs.x[0] * x[1] + x[2] * rhs.x[3] - rhs.x[2] * x[3];
 	q.x[2] = x[0] * rhs.x[2] + rhs.x[0] * x[2] + x[3] * rhs.x[1] - rhs.x[3] * x[1];
 	q.x[3] = x[0] * rhs.x[3] + rhs.x[0] * x[3] + x[1] * rhs.x[2] - rhs.x[1] * x[2];
+
+	return q;
+}
+
+Quaternion Quaternion::operator*(const int& rhs) {
+	
+	Quaternion q;
+
+	q.x[0] = x[0] * rhs;
+	q.x[1] = x[1] * rhs;
+	q.x[2] = x[2] * rhs;
+	q.x[3] = x[3] * rhs;
+
+	return q;
+}
+
+Quaternion Quaternion::operator*(const float& rhs) {
+
+	Quaternion q;
+
+	q.x[0] = x[0] * rhs;
+	q.x[1] = x[1] * rhs;
+	q.x[2] = x[2] * rhs;
+	q.x[3] = x[3] * rhs;
 
 	return q;
 }

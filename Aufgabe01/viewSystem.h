@@ -55,6 +55,11 @@ public:
 	// view-to-world/world-to-view transformations
 	CMat4f getTransform1();  // view to world
 	CMat4f getTransform2();  // world to view
+
+	//quaternion interpolations
+	void lerp(	Quaternion, Quaternion, float);
+	void slerp(	Quaternion, Quaternion, float);
+	void nlerp(	Quaternion, Quaternion, float);
 };
 
 #endif

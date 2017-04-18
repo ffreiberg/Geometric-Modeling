@@ -405,3 +405,34 @@ CMat4f viewSystem::Inverse(CMat4f M)
 
 	return tmp;
 }
+
+void viewSystem::lerp(Quaternion q0, Quaternion q1, float t) {
+	
+	Quaternion q2;
+
+	q0.normalize();
+	q1.normalize();
+
+	q2 = q0 * (1 - t) + q1 * t;
+	q2.normalize();
+
+	ViewUp = q2.toCVector();
+}
+
+void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
+	
+	Quaternion q2, q3;
+
+	float theta_ = acos(q0.dot(q1));
+	float theta = theta_ * t;
+
+	q2 = q1 - q0 * (q0.dot(q1));
+	q2.normalize();
+	q3 = q0 * cos(theta) + q2 * sin(theta);
+
+	ViewUp = q3.toCVector();
+}
+
+void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
+
+}
