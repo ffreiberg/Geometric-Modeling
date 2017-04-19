@@ -24,6 +24,8 @@ public:
 	float dot(Quaternion);
 	float norm();
 	CVec4f toCVector();
+	CVec4f toCPoint();
+	Quaternion conjugate();
 
 	Quaternion operator+(const Quaternion&);
 	Quaternion operator-(const Quaternion&);

@@ -40,11 +40,11 @@ void Quaternion::rotate(Quaternion q)
 	Quaternion qRot;
 
 	//q'
-	Quaternion q_;
-	q_.x[0] = q.x[0];
-	q_.x[1] = -q.x[1];
-	q_.x[2] = -q.x[2];
-	q_.x[3] = -q.x[3];
+	Quaternion q_ = q.conjugate();
+	//q_.x[0] = q.x[0];
+	//q_.x[1] = -q.x[1];
+	//q_.x[2] = -q.x[2];
+	//q_.x[3] = -q.x[3];
 
 	// q * p * q'
 	qRot = q * (*this) * q_;
@@ -89,6 +89,10 @@ float Quaternion::norm() {
 		x[2] * x[2] +
 		x[3] * x[3]
 	);
+}
+
+Quaternion Quaternion::conjugate() {
+	return Quaternion(x[0], -x[1], -x[2], -x[3]);
 }
 
 
@@ -164,5 +168,9 @@ float Quaternion::operator[](int idx) const
 
 CVec4f Quaternion::toCVector()
 {
-	return CVec4f(x[0], x[1], x[2], x[3]);
+	return CVec4f(x[1], x[2], x[3], .0);
+}
+CVec4f Quaternion::toCPoint()
+{
+	return CVec4f(x[1], x[2], x[3], 1.0);
 }

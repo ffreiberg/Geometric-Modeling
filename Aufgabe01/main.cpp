@@ -30,7 +30,7 @@ const int g_iHeight = 500; // window height (choose an appropriate size)
 ////////////////////////////////////////////////////////////
 //
 // private, global variables ... replace by your own ones
-viewSystem view;
+viewSystem view, tmp;
 Quader Q1,Q2,Q3;
 Quaternion b(1., 1., 0., 0.), e(0., -1., 0., 0.);
 float t;
@@ -44,6 +44,7 @@ void init ()
 				 CVec4f(0, 1, 0, 0), // ViewUp
 				 299);
 	view.setMode(VIEW_QUATERNION_MODE); // Hier für AUFGABE01 auf VIEW_MATRIX_MODE setzen.
+	//view.setMode(VIEW_MATRIX_MODE); // Hier für AUFGABE01 auf VIEW_MATRIX_MODE setzen.
 
 	Q1.setData(CVec4f( -25, -25, -25, 1),CVec4f(  25,  25,  25, 1));
 	Q2.setData(CVec4f(   0,   0,   0, 1),CVec4f( 100, 100, 100, 1));
@@ -77,8 +78,8 @@ void display (void) {
 	Q2.draw(view,Color(1,1,0));
 	Q3.draw(view,Color(0,1,0));
 	
-	CMat4f M = view.getTransform1();
-
+	CMat4f M = view.getTransform2();
+/*
 	CVec4f x1(0, 0, 0, 0);
 	CVec4f x2(200, 0, 0, 0);
 
@@ -98,7 +99,7 @@ void display (void) {
 	bhamLineH(x1, x2, Color(.0, .0, 1.));
 	bhamLineH(y1, y2, Color(.0, 1., 0.));
 	bhamLineH(z1, z2, Color(1., .0, .0));
-
+*/
 	glFlush ();
 	glutSwapBuffers (); // swap front and back buffer
 }
@@ -185,21 +186,34 @@ void keyboard (unsigned char key, int x, int y)
 		// interpolation
 		case 'l':
 		case 'L':
+			if (t == 0) {
+				tmp = view;
+			}
 			if (t <= 1.) {
+				view = tmp;
 				view.lerp(b, e, t);
 				t += .01;
 			}
+			
 			break;
 		case 'n':
 		case 'N':
+			if (t == 0) {
+				tmp = view;
+			}
 			if (t <= 1.) {
+				view = tmp;
 				view.nlerp(b, e, t);
 				t += .01;
 			}
 			break;
 		case 's':
 		case 'S':
+			if (t == 0) {
+				tmp = view;
+			}
 			if (t <= 1.) {
+				view = tmp;
 				view.slerp(b, e, t);
 				t += .01;
 			}

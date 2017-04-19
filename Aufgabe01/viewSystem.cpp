@@ -240,19 +240,23 @@ void viewSystem::Rotate(Quaternion q) {
 	Quaternion pU(0, ViewUp);
 
 	// q'
-	q_[0] = q[0];
-	q_[1] = -q[1];
-	q_[2] = -q[2];
-	q_[3] = -q[3];
+	q_ = q.conjugate();
+	//q_[0] = q[0];
+	//q_[1] = -q[1];
+	//q_[2] = -q[2];
+	//q_[3] = -q[3];
 
 	// q * p * q'
 	qRotD = q * pD * q_;
 	qRotE = q * pE * q_;
 	qRotU = q * pU * q_;
 
-	EyePoint(0) = qRotE[1]; EyePoint(1) = qRotE[2]; EyePoint(2) = qRotE[3];
-	ViewDir(0) = qRotD[1]; ViewDir(1) = qRotD[2]; ViewDir(2) = qRotD[3];
-	ViewUp(0) = qRotU[1]; ViewUp(1) = qRotU[2]; ViewUp(2) = qRotU[3];
+	//EyePoint(0) = qRotE[1]; EyePoint(1) = qRotE[2]; EyePoint(2) = qRotE[3];
+	EyePoint = qRotE.toCPoint();
+	//ViewDir(0) = qRotD[1]; ViewDir(1) = qRotD[2]; ViewDir(2) = qRotD[3];
+	ViewDir = qRotD.toCVector();
+	//ViewUp(0) = qRotU[1]; ViewUp(1) = qRotU[2]; ViewUp(2) = qRotU[3];
+	ViewUp = qRotU.toCVector();
 }
 
 void viewSystem::Rotate(CVec4f axis, float angle)
@@ -410,18 +414,23 @@ void viewSystem::lerp(Quaternion q0, Quaternion q1, float t) {
 	
 	Quaternion q2;
 
-	q0.normalize();
-	q1.normalize();
+	//q0.normalize();
+	//q1.normalize();
 
 	q2 = q0 * (1 - t) + q1 * t;
-	q2.normalize();
+	//q2.normalize();
 
-	ViewUp = q2.toCVector();
+	Rotate(q2);
+
+	//ViewUp = q2.toCVector();
 }
 
 void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
 	
 	Quaternion q2, q3;
+
+	q0.normalize();
+	q1.normalize();
 
 	float theta_ = acos(q0.dot(q1));
 	float theta = theta_ * t;
@@ -430,13 +439,17 @@ void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
 	q2.normalize();
 	q3 = q0 * cos(theta) + q2 * sin(theta);
 
-	ViewUp = q3.toCVector();
+	Rotate(q3);
+	//ViewUp = q3.toCVector();
 }
 
 void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
 	
 	Quaternion q2, q3;
 
+	q0.normalize();
+	q1.normalize();
+	
 	float theta_ = acos(q0.dot(q1));
 	float theta = theta_ * t;
 
@@ -445,5 +458,7 @@ void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
 	q3 = q0 * cos(theta) + q2 * sin(theta);
 
 	q3.normalize();
-	ViewUp = q3.toCVector();
+	Rotate(q3);
+	//ViewUp = q3.toCVector();
+
 }
