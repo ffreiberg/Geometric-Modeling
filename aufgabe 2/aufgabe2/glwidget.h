@@ -33,7 +33,7 @@ private:
     int     clickedPoint;
     bool    doIntersection,doSelfIntersection;
     Points  bezier(Points);
-    Points  deCasteljau(Points, float);
+    Points  deCasteljau(Points, float t);
 };
 
 

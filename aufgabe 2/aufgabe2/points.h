@@ -16,6 +16,13 @@ public:
     int   getClosestPoint (float x, float y);
     void  moveClosestPoint(float x, float y, float tox, float toy);
 
+    QList<QPointF> getList();
+    Points getRange(int from, int to);
+    QPointF getMinXY();
+    QPointF getMaxXY();
+    QPointF getPoint(int i);
+    void clear();
+
 private:
     QList<QPointF> pointlist;
 };

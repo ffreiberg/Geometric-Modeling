@@ -27,10 +27,12 @@ LIBS += -lglut -lGLU
 SOURCES += main.cpp\
         mainwindow.cpp \
     points.cpp \
-    glwidget.cpp
+    glwidget.cpp \
+    bezier.cpp
 
 HEADERS  += mainwindow.h \
     points.h \
-    glwidget.h
+    glwidget.h \
+    bezier.h
 
 FORMS    += mainwindow.ui

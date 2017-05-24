@@ -4,6 +4,14 @@ Points::Points()
 {
 }
 
+Points Points::getRange(int from, int to){
+    Points new_list;
+    for(int i = from; i < to; i++){
+        new_list.addPoint(this->getPointX(i), this->getPointY(i));
+    }
+    return new_list;
+}
+
 void Points::addPoint(float x,float y)
 {
     pointlist.append(QPointF(x,y));
@@ -32,6 +40,37 @@ void Points::setPointY(int i, float y)
 int Points::getCount()
 {
     return pointlist.size();
+}
+
+QPointF Points::getPoint(int i){
+    return pointlist[i];
+}
+
+void Points::clear()
+{
+    pointlist.clear();
+}
+
+QList<QPointF> Points::getList(){
+    return pointlist;
+}
+
+QPointF Points::getMinXY(){
+    QPointF minXY(1.0,1.0);
+    for(int i = 0; i < pointlist.size(); i++){
+        minXY.setX(minXY.x() < pointlist[i].x() ? minXY.x() : pointlist[i].x());
+        minXY.setY(minXY.y() < pointlist[i].y() ? minXY.y() : pointlist[i].y());
+    }
+    return minXY;
+}
+
+QPointF Points::getMaxXY(){
+    QPointF maxXY(-1.0,-1.0);
+    for(int i = 0; i < pointlist.size(); i++){
+        maxXY.setX(maxXY.x() > pointlist[i].x() ? maxXY.x() : pointlist[i].x());
+        maxXY.setY(maxXY.y() > pointlist[i].y() ? maxXY.y() : pointlist[i].y());
+    }
+    return maxXY;
 }
 
 int Points::getClosestPoint(float x, float y)

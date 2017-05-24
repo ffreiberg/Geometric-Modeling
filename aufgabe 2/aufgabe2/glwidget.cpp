@@ -3,6 +3,7 @@
 #include <QtGui>
 #include <GL/glu.h>
 #include "mainwindow.h"
+#include "bezier.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
@@ -66,21 +67,85 @@ void GLWidget::paintGL()
     glEnd();
 
     // Kurve
-    glColor3f(1.0,1.0,1.0);
+    glColor3f(1.0,0.0,0.5);
     // AUFGABE: Hier Kurve zeichnen
     // dabei epsilon_draw benutzen
+/*
+    Points polygonLeft, polygonRight;
+
+    for (int i = 0; i < 5; ++i) {
+        polygonLeft.addPoint(points.getPointX(i), points.getPointY(i));
+    }
+
+    for (int i = 5; i < points.getCount(); ++i) {
+        polygonRight.addPoint(points.getPointX(i), points.getPointY(i));
+    }
+
+    Points bezierCurveLeft = bezier(polygonLeft);
+    Points bezierCurveRight = bezier(polygonRight);
+
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < bezierCurveLeft.getCount(); ++i) {
+        glVertex2f(bezierCurveLeft.getPointX(i), bezierCurveLeft.getPointY(i));
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < bezierCurveRight.getCount(); ++i) {
+        glVertex2f(bezierCurveRight.getPointX(i), bezierCurveRight.getPointY(i));
+    }
+    glEnd();
+*/
+    Bezier bezierCurveLeft(points.getRange(0,5),epsilon_intersection, epsilon_draw);
+    Bezier bezierCurveRight(points.getRange(5,points.getCount()),epsilon_intersection, epsilon_draw);
+
+    Points curveLeft = bezierCurveLeft.bezier();
+    //glColor3f(1.0, 1.0, 0.0);
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < curveLeft.getCount(); i++) {
+        glVertex2f(curveLeft.getPointX(i), curveLeft.getPointY(i));
+    }
+    glEnd();
+
+    Points curveRight = bezierCurveRight.bezier();
+    glColor3f(0.5, 0.0, 1.0);
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < curveRight.getCount(); i++) {
+        glVertex2f(curveRight.getPointX(i), curveRight.getPointY(i));
+    }
+    glEnd();
 
     // Schnittpunkte zeichnen
     if (doIntersection) {
+        QList<QPointF> intersections = bezierCurveLeft.intersectBezier(bezierCurveRight.getControlPoints());
         glColor3f(0.0,1.0,0.0);
+        glBegin(GL_POINTS);
+        for (auto p : intersections) {
+            glVertex2f(p.x(),p.y());
+        }
+        glEnd();
         // AUFGABE: Hier Schnitte zeichnen
         // dabei epsilon_intersection benutzen
     }
+    // AUFGABE: Hier Selbstschnitte zeichnen
+    // dabei epsilon_intersection benutzen
     if (doSelfIntersection) {
-        glColor3f(1.0,0.0,1.0);
-        // AUFGABE: Hier Selbstschnitte zeichnen
-        // dabei epsilon_intersection benutzen
+        glColor3f(0.0,1.0,0.0);
+        QList<QPointF> bezierLeftSelfIntersections = bezierCurveLeft.selfIntersect();
+        glBegin(GL_POINTS);
+        for (auto p : bezierLeftSelfIntersections) {
+            glVertex2f(p.x(),p.y());
+        }
+        glEnd();
+
+        QList<QPointF> bezierRightSelfIntersection = bezierCurveRight.selfIntersect();
+        glBegin(GL_POINTS);
+        for (auto p : bezierRightSelfIntersection) {
+            glVertex2f(p.x(),p.y());
+        }
+        glEnd();
     }
+
 }
 
 
@@ -161,31 +226,31 @@ void GLWidget::setEpsilonIntersection(double value)
     epsilon_intersection = value;
 }
 
-Points GLWidget::bezier(Points controlPoints)
+Points GLWidget::bezier(Points controlPolygon)
 {
     Points bezierPoints;
 
     for (float t = 0; t <= 1.; t += epsilon_draw) {
-        Points p = deCasteljau(controlPoints, t);
+        Points p = deCasteljau(controlPolygon, t);
         bezierPoints.addPoint(p.getPointX(0), p.getPointY(0));
     }
-    bezierPoints.addPoint(controlPoints.getPointX(controlPoints.getCount() - 1), controlPoints.getPointY(controlPoints.getCount() - 1));
+    bezierPoints.addPoint(controlPolygon.getPointX(controlPolygon.getCount() - 1), controlPolygon.getPointY(controlPolygon.getCount() - 1));
     return bezierPoints;
 }
 
-Points GLWidget::deCasteljau(Points controlPoints, float tCurrent)
+Points GLWidget::deCasteljau(Points controlPoints, float t)
 {
     Points pNext;
 
     for (int i = 0; i < controlPoints.getCount() - 1; ++i) {
         //bij = (1 - t)bij-1 + tbi+1j-1
-        float x = (1 - tCurrent) * controlPoints.getPointX(i) + controlPoints.getPointX(i + 1) * tCurrent;
-        float y = (1 - tCurrent) * controlPoints.getPointY(i) + controlPoints.getPointY(i + 1) * tCurrent;
+        float x = (1 - t) * controlPoints.getPointX(i) + controlPoints.getPointX(i + 1) * t;
+        float y = (1 - t) * controlPoints.getPointY(i) + controlPoints.getPointY(i + 1) * t;
         pNext.addPoint(x,y);
     }
 
     if (pNext.getCount() == 1)
         return pNext;
     else
-        return deCasteljau(pNext, tCurrent);
+        return deCasteljau(pNext, t);
 }
