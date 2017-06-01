@@ -26,8 +26,10 @@ public:
 	CVec4f toCVector();
 	CVec4f toCPoint();
 	Quaternion conjugate();
+	Quaternion invert();
 
 	Quaternion operator+(const Quaternion&);
+	Quaternion operator-();
 	Quaternion operator-(const Quaternion&);
 	Quaternion operator*(const Quaternion&);
 	Quaternion operator*(const int&);

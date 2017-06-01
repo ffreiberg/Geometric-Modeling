@@ -208,3 +208,20 @@ Points Bezier::getBezierCurve()
 {
     return bezierCurve;
 }
+
+Points Bezier::addNewSegment(QPointF newPoint){
+    Points curve = deCasteljau(controlPoints, 2);
+    Points newSegment;
+    QPointF point = controlPoints.getPoint(controlPoints.getCount()-1);
+    newSegment.addPoint(point.x(), point.y());
+    int count = curve.getCount() / 2;
+    for(int i = curve.getCount() - 2; i > count; i--){
+        newSegment.addPoint(curve.getPointX(i), curve.getPointY(i));
+    }
+    newSegment.addPoint(newPoint.x(), newPoint.y());
+
+    this->bezierCurve.clear();
+    bezier(newSegment, 5);
+
+    return newSegment;
+}

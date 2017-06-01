@@ -24,14 +24,16 @@ protected:
     void mouseMoveEvent       (QMouseEvent *event);
     void mousePressEvent      (QMouseEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
+    void keyPressEvent        (QKeyEvent *event);
 
 private:
     QPointF transformPosition(QPoint p);
+    QPointF newPoint;
     Points  points;
     float   aspectx, aspecty;
     float   epsilon_draw, epsilon_intersection;
     int     clickedPoint;
-    bool    doIntersection,doSelfIntersection;
+    bool    doIntersection,doSelfIntersection, doAddSegment, seg;
     Points  bezier(Points);
     Points  deCasteljau(Points, float t);
 };

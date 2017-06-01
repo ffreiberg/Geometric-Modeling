@@ -9,6 +9,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     doIntersection       = false;
     doSelfIntersection   = false;
+    doAddSegment         = true;
+    seg                  = false;
     epsilon_draw         = (float)0.05;
     epsilon_intersection = (float)0.000005;
 
@@ -146,6 +148,48 @@ void GLWidget::paintGL()
         glEnd();
     }
 
+    if (doAddSegment){
+        Points newSegment;
+        if(seg){
+            newSegment = bezierCurveLeft.addNewSegment(newPoint);
+            //Bezier new_segment_curve(new_segment, epsilon_intersection, epsilon_draw);
+            Points newSegmentCurve = bezierCurveLeft.getBezierCurve();
+
+            glColor3f(0.0,1.0,1.0);
+            glBegin(GL_LINE_STRIP);
+            for (int i=0; i<newSegmentCurve.getCount(); i++) {
+                glVertex2f(newSegmentCurve.getPointX(i),newSegmentCurve.getPointY(i));
+            }
+            glEnd();
+        }else{
+            newSegment = bezierCurveRight.addNewSegment(newPoint);
+            //Bezier new_segment_curve(new_segment, epsilon_intersection, epsilon_draw);
+            Points newSegmentCurve = bezierCurveRight.getBezierCurve();
+
+            glColor3f(0.0,1.0,1.0);
+            glBegin(GL_LINE_STRIP);
+            for (int i=0; i<newSegmentCurve.getCount(); i++) {
+                glVertex2f(newSegmentCurve.getPointX(i),newSegmentCurve.getPointY(i));
+            }
+            glEnd();
+        }
+
+        glPointSize(7.0);
+        glBegin(GL_POINTS);
+        for (int i=0; i < newSegment.getCount(); i++) {
+            glVertex2f(newSegment.getPointX(i),newSegment.getPointY(i));
+        }
+        glEnd();
+
+        // Hüllpolygone zeichnen
+        glColor3f(0.0,0.0,1.0);
+        glBegin(GL_LINE_STRIP);
+        for (int i=0; i<newSegment.getCount(); i++) {
+            glVertex2f(newSegment.getPointX(i),newSegment.getPointY(i));
+        }
+        glEnd();
+    }
+
 }
 
 
@@ -198,10 +242,33 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         points.setPointY(clickedPoint,posF.y());
         update();
     }
+
+    if (event->buttons() & Qt::RightButton) {
+        QPoint pos = event->pos();
+        QPointF posF = transformPosition(pos);
+        newPoint.setX(posF.x());
+        newPoint.setY(posF.y());
+        seg=true;
+        update();
+    }
+
+    if (event->buttons() & Qt::MidButton) {
+        QPoint pos = event->pos();
+        QPointF posF = transformPosition(pos);
+        newPoint.setX(posF.x());
+        newPoint.setY(posF.y());
+        seg = false;
+        update();
+    }
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
 }
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *)
 {
+
 }
 
 void GLWidget::setIntersection(int state)

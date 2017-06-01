@@ -32,7 +32,7 @@ const int g_iHeight = 500; // window height (choose an appropriate size)
 // private, global variables ... replace by your own ones
 viewSystem view, tmp;
 Quader Q1,Q2,Q3;
-Quaternion b(1., 1., 0., 0.), e(0., -1., 0., 0.);
+Quaternion b(1., 1., 1., 0.), e(0., -1., 0., 0.);
 float t;
 //
 /////////////////////////////////////////////////////////////

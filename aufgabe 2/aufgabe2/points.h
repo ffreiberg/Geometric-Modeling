@@ -22,6 +22,7 @@ public:
     QPointF getMaxXY();
     QPointF getPoint(int i);
     void clear();
+    void sort();
 
 private:
     QList<QPointF> pointlist;

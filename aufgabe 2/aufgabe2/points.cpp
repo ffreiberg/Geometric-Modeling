@@ -51,6 +51,15 @@ void Points::clear()
     pointlist.clear();
 }
 
+bool sortByX(const QPointF &pointA, const QPointF &pointB){
+    return pointA.x() < pointB.x();
+}
+
+void Points::sort()
+{
+    qSort(pointlist.begin(), pointlist.end(), sortByX);
+}
+
 QList<QPointF> Points::getList(){
     return pointlist;
 }

@@ -17,6 +17,7 @@ public:
     Points bezier();
     Points getBezierCurve();
     Points getControlPoints();
+    Points addNewSegment(QPointF);
 
     QList<QPointF> selfIntersect();
     QList<QPointF> intersectBezier(Points);

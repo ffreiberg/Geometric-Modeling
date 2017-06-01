@@ -1,0 +1,7 @@
+qtglviewer2d/glwidget.cpp
+qtglviewer2d/glwidget.h
+qtglviewer2d/main.cpp
+qtglviewer2d/mainwindow.cpp
+qtglviewer2d/mainwindow.h
+qtglviewer2d/points.cpp
+qtglviewer2d/points.h

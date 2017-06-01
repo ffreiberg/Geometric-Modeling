@@ -241,22 +241,19 @@ void viewSystem::Rotate(Quaternion q) {
 
 	// q'
 	q_ = q.conjugate();
-	//q_[0] = q[0];
-	//q_[1] = -q[1];
-	//q_[2] = -q[2];
-	//q_[3] = -q[3];
 
 	// q * p * q'
 	qRotD = q * pD * q_;
 	qRotE = q * pE * q_;
 	qRotU = q * pU * q_;
 
-	//EyePoint(0) = qRotE[1]; EyePoint(1) = qRotE[2]; EyePoint(2) = qRotE[3];
 	EyePoint = qRotE.toCPoint();
-	//ViewDir(0) = qRotD[1]; ViewDir(1) = qRotD[2]; ViewDir(2) = qRotD[3];
+	
 	ViewDir = qRotD.toCVector();
-	//ViewUp(0) = qRotU[1]; ViewUp(1) = qRotU[2]; ViewUp(2) = qRotU[3];
+	ViewDir.normalize();
+	
 	ViewUp = qRotU.toCVector();
+	ViewUp.normalize();
 }
 
 void viewSystem::Rotate(CVec4f axis, float angle)
@@ -414,15 +411,10 @@ void viewSystem::lerp(Quaternion q0, Quaternion q1, float t) {
 	
 	Quaternion q2;
 
-	//q0.normalize();
-	//q1.normalize();
-
 	q2 = q0 * (1 - t) + q1 * t;
-	//q2.normalize();
+	q2.normalize();
 
 	Rotate(q2);
-
-	//ViewUp = q2.toCVector();
 }
 
 void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
@@ -440,7 +432,6 @@ void viewSystem::slerp(Quaternion q0, Quaternion q1, float t) {
 	q3 = q0 * cos(theta) + q2 * sin(theta);
 
 	Rotate(q3);
-	//ViewUp = q3.toCVector();
 }
 
 void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
@@ -449,16 +440,14 @@ void viewSystem::nlerp(Quaternion q0, Quaternion q1, float t) {
 
 	q0.normalize();
 	q1.normalize();
-	
+
 	float theta_ = acos(q0.dot(q1));
 	float theta = theta_ * t;
 
 	q2 = q1 - q0 * (q0.dot(q1));
 	q2.normalize();
 	q3 = q0 * cos(theta) + q2 * sin(theta);
-
 	q3.normalize();
-	Rotate(q3);
-	//ViewUp = q3.toCVector();
 
+	Rotate(q3);
 }
