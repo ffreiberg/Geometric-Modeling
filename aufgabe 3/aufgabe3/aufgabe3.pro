@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-05-23T14:04:14
+# Project created by QtCreator 2017-06-09T13:19:57
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = aufgabe2
+TARGET = aufgabe3
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -22,17 +22,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-LIBS += -lGL -lGLU #-lGLEW -lglut
+LIBS += -lGL -lGLU
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    points.cpp \
     glwidget.cpp \
-    bezier.cpp
+    knots.cpp \
+    points.cpp \
+    bezier.cpp \
+    bspline.cpp
 
 HEADERS  += mainwindow.h \
-    points.h \
     glwidget.h \
-    bezier.h
+    knots.h \
+    points.h \
+    bezier.h \
+    bspline.h
 
 FORMS    += mainwindow.ui
