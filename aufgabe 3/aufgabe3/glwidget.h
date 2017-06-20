@@ -3,6 +3,8 @@
 
 #include <QGLWidget>
 #include "knots.h"
+#include "bspline.h"
+#include "bezier.h"
 
 class GLWidget : public QGLWidget
 {
@@ -20,12 +22,14 @@ protected:
     void mousePressEvent        (QMouseEvent *event);
 private:
     QPointF                     transformPosition(QPoint p);
+    BSpline                     *bSpline;
     float                       aspectx, aspecty;
-    Points                      points;
+    Points                      points, bezier;
     Knots                       knots;
     int                         clickedPoint;
     int                         clickedKnot;
     float                       epsilon_draw;
+    int                         degree;
 };
 
 

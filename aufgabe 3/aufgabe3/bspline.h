@@ -10,15 +10,20 @@
 class BSpline
 {
 public:
-    BSpline         ();
-    BSpline         (Points, Knots, float);
-    ~BSpline        ();
+    BSpline             ();
+    BSpline             (Points, Knots, int, float);
+    ~BSpline            ();
 
-    void deBoor     ();
+    void toBezier       (Points&, Knots&, QList<QList<QPointF>>&);
+    int insertKnot      (Points&, Knots&, float);
+
 private:
-    Points          bSpline, controlPoints;
-    Knots           knots;
-    float           epsilonDraw;
+    void deBoor         (Points&, Knots&, float, int);
+    int findInterval    (Points&, Knots&, float);
+    Points              bSpline, controlPoints;
+    Knots               knots;
+    int                 degree;
+    float               epsilonDraw;
 };
 
 #endif // BSPLINE_H

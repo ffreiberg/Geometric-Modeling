@@ -1,4 +1,5 @@
 #include "points.h"
+#include <QDebug>
 
 Points::Points()
 {
@@ -11,6 +12,7 @@ void Points::addPoint(float x,float y)
 
 float Points::getPointX(int i)
 {
+    qDebug() << i << " " << pointlist.count();
     return pointlist[i].x();
 }
 
@@ -43,6 +45,16 @@ void Points::clear()
     pointlist.clear();
 }
 
+void Points::insert(int i, QPointF p)
+{
+    pointlist.insert(i, p);
+}
+
+void Points::removeAt(int i)
+{
+    pointlist.removeAt(i);
+}
+
 float Points::getDistance(int i, float x, float y)
 {
     QPointF testpnt = QPointF(x,y);
@@ -72,10 +84,16 @@ void Points::moveClosestPoint(float x, float y, float tox, float toy)
     pointlist[pntnum].setY(toy);
 }
 
-Points Points::getRange(int from, int to){
-    Points new_list;
+Points Points::getRange(int from, int to)
+{
+    Points newList;
     for(int i = from; i < to; i++){
-        new_list.addPoint(this->getPointX(i), this->getPointY(i));
+        newList.addPoint(this->getPointX(i), this->getPointY(i));
     }
-    return new_list;
+    return newList;
+}
+
+void Points::setPointList(QList<QPointF> l)
+{
+    pointlist = l;
 }

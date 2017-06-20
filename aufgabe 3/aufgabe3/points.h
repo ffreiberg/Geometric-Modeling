@@ -16,6 +16,9 @@ public:
     float getDistance           (int, float, float);
     int   getClosestPoint       ( float, float);
     void  moveClosestPoint      (float, float, float, float);
+    void  insert                (int, QPointF);
+    void  removeAt              (int);
+    void  setPointList          (QList<QPointF>);
 
     Points getRange             (int, int);
     QPointF getPoint            (int);

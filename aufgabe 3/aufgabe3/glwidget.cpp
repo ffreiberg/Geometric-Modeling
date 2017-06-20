@@ -7,6 +7,7 @@
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     epsilon_draw = 0.05;
+    degree = 4;
 
     // Hier Punkte hinzufügen: Schönere Startpositionen und anderer Grad!
     points.addPoint(-1.00,  0.5);
@@ -23,6 +24,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
     knots.insertKnot(0.7);
     knots.insertKnot(0.9);
     knots.insertKnot(0.95);
+
+    bSpline = new BSpline(points, knots, degree, epsilon_draw);
 }
 
 GLWidget::~GLWidget()
@@ -78,6 +81,39 @@ void GLWidget::paintGL()
     glColor3f(1.0,1.0,1.0);
     // AUFGABE: Hier Kurve zeichnen
     // dabei epsilon_draw benutzen
+
+    Points _points = points;
+    Knots _knots = knots;
+    QList<QList<QPointF>> _bezier;
+
+    bSpline->toBezier(_points, _knots, _bezier);
+    //bSpline->toBezier(_bezier);
+
+    for(int i = 0; i < _bezier.size(); ++i) {
+        Points p;
+        p.setPointList(_bezier[i]);
+        Bezier bezier(p, .0, epsilon_draw);
+
+        Points curve = bezier.bezier();
+
+        glColor3f(1., 1., 1.);
+        glBegin(GL_LINE_STRIP);
+        for(int j = 0; j < _bezier[i].size(); ++j) {
+            qDebug() << _bezier[i][j];
+            glVertex2f(_bezier[i][j].x(), _bezier[i][j].y());
+        }
+        glEnd();
+
+        qDebug() << "\n\n#####\n\n";
+
+        glColor3f(0., 1., .0);
+        glBegin(GL_LINE_STRIP);
+        for(int j = 0; j < curve.getCount(); ++j) {
+            qDebug() << curve.getPoint(j);
+            glVertex2f(curve.getPointX(j), curve.getPointY(j));
+        }
+        glEnd();
+    }
 }
 
 
@@ -146,8 +182,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         }
     }
     if (event->buttons() & Qt::RightButton) {
-        knots.insertKnotX(posF.x());
+        //knots.insertKnotX(posF.x());
         // AUFGABE: Hier Knoten in eine B-Spline-Kurve einfügen.
+        int ret = bSpline->insertKnot(points, knots, (posF.x() + 0.9) / 1.8);
+        //int ret = bSpline->insertKnot((posF.x() + 0.9) / 1.8);
+
+        if (ret != -1) {
+            knots.insertKnotX(posF.x());
+        }
     }
 
     update();

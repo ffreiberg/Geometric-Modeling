@@ -30,13 +30,17 @@ SOURCES += main.cpp\
     knots.cpp \
     points.cpp \
     bezier.cpp \
-    bspline.cpp
+    bspline.cpp \ #\
+#    bspline_copy1.cpp
+#    bspline_copy.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
     knots.h \
     points.h \
     bezier.h \
-    bspline.h
+    bspline.h \ #\
+#    bspline_copy1.h
+#    bspline_copy.h
 
 FORMS    += mainwindow.ui
