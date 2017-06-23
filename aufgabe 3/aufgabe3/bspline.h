@@ -11,16 +11,16 @@ class BSpline
 {
 public:
     BSpline             ();
-    BSpline             (Points, Knots, int, float);
+    BSpline             (int, float);
     ~BSpline            ();
 
     void toBezier       (Points&, Knots&, QList<QList<QPointF>>&);
     int insertKnot      (Points&, Knots&, float);
 
 private:
-    void deBoor         (Points&, Knots&, float, int);
+    int deBoor         (Points&, Knots&, float, int);
     int findInterval    (Points&, Knots&, float);
-    Points              bSpline, controlPoints;
+    Points              controlPoints;
     Knots               knots;
     int                 degree;
     float               epsilonDraw;

@@ -6,11 +6,9 @@ BSpline::BSpline()
 
 }
 
-BSpline::BSpline(Points controlPoints, Knots knots, int degree, float epsilonDraw)
+BSpline::BSpline(int degree, float epsilonDraw)
 {
-    this->controlPoints = controlPoints;
     this->degree = degree;
-    this->knots = knots;
     this->epsilonDraw = epsilonDraw;
 }
 
@@ -45,9 +43,9 @@ int BSpline::insertKnot(Points& _points, Knots& _knots, float t)
         return r;
     }
 
-    deBoor(_points, _knots, t, r);
+    int d = deBoor(_points, _knots, t, r);
 
-    return 0;
+    return d;
 }
 
 int BSpline::findInterval(Points& _points, Knots& _knots, float t)
@@ -64,7 +62,7 @@ int BSpline::findInterval(Points& _points, Knots& _knots, float t)
     return r;
 }
 
-void BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
+int BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
 {
     Points newControlPoints;
 
@@ -72,8 +70,8 @@ void BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
 
     for(int _i = r - n; _i < r; ++_i) {
         int i = _i + 1;
-        if(i < 0 || (i + n) > _knots.getCount() - 1) {
-            return;
+        if(i <= 0 || (i + n) >= _knots.getCount() - 1 /*|| i >= _points.getCount()*/) {
+            return -1;
         }
         float x_i = _knots.getValue(i);
         float x_ni = _knots.getValue(n + i);
@@ -101,8 +99,9 @@ void BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
         _points.insert(i, QPointF(newControlPoints.getPointX(j), newControlPoints.getPointY(j)));
     }
 
-    qDebug() << "##### DEBOOR: #####";
-    for (int i = 0; i < _points.getCount(); ++i) {
-        qDebug() << _points.getPoint(i);
-    }
+//    qDebug() << "##### DEBOOR: #####";
+//    for (int i = 0; i < _points.getCount(); ++i) {
+//        qDebug() << _points.getPoint(i);
+//    }
+    return 0;
 }

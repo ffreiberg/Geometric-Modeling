@@ -12,13 +12,20 @@ void Points::addPoint(float x,float y)
 
 float Points::getPointX(int i)
 {
-    qDebug() << i << " " << pointlist.count();
-    return pointlist[i].x();
+//    qDebug() << __FILE__ << " getPointX: " << i << " " << pointlist.size() - 1;
+    if(i < pointlist.size() || i >= 0)
+        return pointlist[i].x();
+    else
+        throw std::out_of_range("out of range");
 }
 
 float Points::getPointY(int i)
 {
-    return pointlist[i].y();
+//    qDebug() << __FILE__ << " getPointY: " << i << " " << pointlist.size() - 1;
+    if(i < pointlist.size() && i >= 0)
+        return pointlist[i].y();
+    else
+        return -2.;
 }
 
 void Points::setPointX(int i, float x)
@@ -37,6 +44,7 @@ int Points::getCount()
 }
 
 QPointF Points::getPoint(int i){
+//    qDebug() << __FILE__ << " getPoint: " << i << " " << pointlist.size() - 1;
     return pointlist[i];
 }
 
@@ -47,11 +55,13 @@ void Points::clear()
 
 void Points::insert(int i, QPointF p)
 {
+//    qDebug() << __FILE__ << " insert: " << i << " " << pointlist.size() - 1;
     pointlist.insert(i, p);
 }
 
 void Points::removeAt(int i)
 {
+//    qDebug() << __FILE__ << " removeAt: " << i << " " << pointlist.size() - 1;
     pointlist.removeAt(i);
 }
 

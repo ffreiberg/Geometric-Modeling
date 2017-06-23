@@ -1,5 +1,6 @@
 #include "knots.h"
 #include <cstdio>
+#include <QDebug>
 
 Knots::Knots():Points()
 {
@@ -45,5 +46,6 @@ void Knots::setValueX(int i, float x)
 
 float Knots::getValue(int i)
 {
+//    qDebug() << __FILE__ << " getValue: " << i << " " << pointlist.size() - 1;
     return (pointlist[i].x()+0.9) / 1.8;
 }

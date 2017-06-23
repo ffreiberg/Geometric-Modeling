@@ -25,7 +25,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
     knots.insertKnot(0.9);
     knots.insertKnot(0.95);
 
-    bSpline = new BSpline(points, knots, degree, epsilon_draw);
+    bSpline = new BSpline(degree, epsilon_draw);
 }
 
 GLWidget::~GLWidget()
@@ -87,7 +87,7 @@ void GLWidget::paintGL()
     QList<QList<QPointF>> _bezier;
 
     bSpline->toBezier(_points, _knots, _bezier);
-    //bSpline->toBezier(_bezier);
+//    bSpline->toBezier(points, knots, _bezier);
 
     for(int i = 0; i < _bezier.size(); ++i) {
         Points p;
@@ -99,17 +99,17 @@ void GLWidget::paintGL()
         glColor3f(1., 1., 1.);
         glBegin(GL_LINE_STRIP);
         for(int j = 0; j < _bezier[i].size(); ++j) {
-            qDebug() << _bezier[i][j];
+//            qDebug() << _bezier[i][j];
             glVertex2f(_bezier[i][j].x(), _bezier[i][j].y());
         }
         glEnd();
 
-        qDebug() << "\n\n#####\n\n";
+//        qDebug() << "\n\n#####\n\n";
 
         glColor3f(0., 1., .0);
         glBegin(GL_LINE_STRIP);
         for(int j = 0; j < curve.getCount(); ++j) {
-            qDebug() << curve.getPoint(j);
+//            qDebug() << curve.getPoint(j);
             glVertex2f(curve.getPointX(j), curve.getPointY(j));
         }
         glEnd();
