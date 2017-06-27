@@ -50,6 +50,7 @@ int BSpline::insertKnot(Points& _points, Knots& _knots, float t)
 
 int BSpline::findInterval(Points& _points, Knots& _knots, float t)
 {
+
     int r = _knots.getCount() - 1;
 
     while(r > 0 && _knots.getValue(r) > t) {
@@ -70,7 +71,7 @@ int BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
 
     for(int _i = r - n; _i < r; ++_i) {
         int i = _i + 1;
-        if(i <= 0 || (i + n) >= _knots.getCount() - 1 /*|| i >= _points.getCount()*/) {
+        if(i <= 0 || (i + n + 1) >= _knots.getCount() - 1 /*|| i >= _points.getCount()*/) {
             return -1;
         }
         float x_i = _knots.getValue(i);
@@ -90,12 +91,13 @@ int BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
         }
     }
 
-    for(int i = r - n + 1; i < r; ++i) {
-        _points.removeAt(r - n + 1);
+    int rn1 = r - n + 1;
+    for(int i = rn1; i < r; ++i) {
+        _points.removeAt(rn1);
     }
 
     int j = 0;
-    for(int i = r - n + 1; j < newControlPoints.getCount(); ++i, ++j) {
+    for(int i = rn1; j < newControlPoints.getCount(); ++i, ++j) {
         _points.insert(i, QPointF(newControlPoints.getPointX(j), newControlPoints.getPointY(j)));
     }
 

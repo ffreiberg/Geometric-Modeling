@@ -7,7 +7,7 @@
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     epsilon_draw = 0.05;
-    degree = 4;
+    degree = 3;
 
     // Hier Punkte hinzufügen: Schönere Startpositionen und anderer Grad!
     points.addPoint(-1.00,  0.5);
@@ -20,7 +20,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
     knots.insertKnot(0.1);
     knots.insertKnot(0.3);
     knots.insertKnot(0.4);
-    knots.insertKnot(0.5);
+    knots.insertKnot(0.6);
     knots.insertKnot(0.7);
     knots.insertKnot(0.9);
     knots.insertKnot(0.95);
