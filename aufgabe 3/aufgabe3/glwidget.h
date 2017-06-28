@@ -15,6 +15,7 @@ public:
 public slots:
     void setEpsilonDraw         (double value);
 protected:
+    bool isCarry                (qreal);
     void paintGL                ();
     void initializeGL           ();
     void resizeGL               (int width, int height);

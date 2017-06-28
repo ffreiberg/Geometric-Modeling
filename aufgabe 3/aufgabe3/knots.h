@@ -9,6 +9,7 @@ public:
     void insertKnot(float value);
     void insertKnotX(float x);
     void setValueX(int i, float x);
+    void clear();
     float getValue(int i);
 };
 

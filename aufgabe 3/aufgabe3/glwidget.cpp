@@ -7,7 +7,7 @@
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
     epsilon_draw = 0.05;
-    degree = 3;
+    degree = 2;
 
     // Hier Punkte hinzufügen: Schönere Startpositionen und anderer Grad!
     points.addPoint(-1.00,  0.5);
@@ -18,9 +18,16 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 
     knots.insertKnot(0.05);
     knots.insertKnot(0.1);
-    knots.insertKnot(0.3);
-    knots.insertKnot(0.4);
-    knots.insertKnot(0.6);
+
+    if(degree != 1 && degree != 2)
+        knots.insertKnot(0.3);
+
+    if(degree != 1 && degree != 3)
+        knots.insertKnot(0.4);
+
+    if(degree != 1 && degree != 2)
+        knots.insertKnot(0.5);
+
     knots.insertKnot(0.7);
     knots.insertKnot(0.9);
     knots.insertKnot(0.95);
@@ -161,6 +168,24 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+bool GLWidget::isCarry(qreal x){
+
+    bool carry = false;
+    int numberCurves = points.getCount() - degree;
+
+    for(int i = 0; i < knots.getCount(); ++i){
+        if(x < knots.getPointX(i)){
+            qDebug() << i << " " << degree << " " << numberCurves << "\n";
+            if(i >= degree + 1 && i <= degree + numberCurves){
+                carry = true;
+            }
+            break;
+        }
+    }
+    qDebug() << carry << "\n";
+    return carry;
+}
+
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     QPoint pos = event->pos();
@@ -184,11 +209,13 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     if (event->buttons() & Qt::RightButton) {
         //knots.insertKnotX(posF.x());
         // AUFGABE: Hier Knoten in eine B-Spline-Kurve einfügen.
-        int ret = bSpline->insertKnot(points, knots, (posF.x() + 0.9) / 1.8);
-        //int ret = bSpline->insertKnot((posF.x() + 0.9) / 1.8);
+        if(isCarry(posF.x())){
+            int ret = bSpline->insertKnot(points, knots, (posF.x() + 0.9) / 1.8);
+            //int ret = bSpline->insertKnot((posF.x() + 0.9) / 1.8);
 
-        if (ret != -1) {
-            knots.insertKnotX(posF.x());
+            if (ret != -1) {
+                knots.insertKnotX(posF.x());
+            }
         }
     }
 

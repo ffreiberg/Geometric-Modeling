@@ -44,6 +44,10 @@ void Knots::setValueX(int i, float x)
     pointlist[i].setX(xsafe);
 }
 
+void Knots::clear(){
+    pointlist.clear();
+}
+
 float Knots::getValue(int i)
 {
 //    qDebug() << __FILE__ << " getValue: " << i << " " << pointlist.size() - 1;

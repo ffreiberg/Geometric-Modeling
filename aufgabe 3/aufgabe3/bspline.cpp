@@ -71,9 +71,13 @@ int BSpline::deBoor(Points& _points, Knots& _knots, float t, int r)
 
     for(int _i = r - n; _i < r; ++_i) {
         int i = _i + 1;
-        if(i <= 0 || (i + n + 1) >= _knots.getCount() - 1 /*|| i >= _points.getCount()*/) {
+
+//        qDebug() << i << " " << i + n << " " << _knots.getCount() << "\n";
+        if(i <= 0 || (i + n) >= _knots.getCount()) {
+//            qDebug() << "IF: " << i << " " << i + n << " " << _knots.getCount() << "\n";
             return -1;
         }
+
         float x_i = _knots.getValue(i);
         float x_ni = _knots.getValue(n + i);
         float a_i = .0;
